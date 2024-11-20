@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "zen.helloWorld",
-        "title": "Hello World"
+        "command": "zen.getCurrentLineContent",
+        "title": "Get Current Line Content"
       }
     ]
   },
