@@ -3,20 +3,21 @@
 import * as vscode from "vscode";
 
 interface Editor {
-  editor: "";
+  editor: vscode.TextEditor;
+  lineContent: string;
+  position: vscode.Position;
 }
 
 // Get Text	Line
-function getTextEditorCurrentLine(): string {
+function getEditor(): Editor | null {
   const editor = vscode.window.activeTextEditor;
   if (editor) {
     const position = editor.selection.active;
     const line = position.line;
-    const nextLinePosition = position.with(line + 1, 0);
     const lineContent = editor.document.lineAt(line).text;
-    return lineContent;
+    return { editor, lineContent, position };
   } else {
-    return "";
+    return null;
   }
 }
 
@@ -26,14 +27,12 @@ function askAI(comment: string): string {
 }
 
 // output AI Code
-function outputCode(AIResponse: string) {
+function outputCode(editor: Editor, AIResponse: string) {
   vscode.window.showInformationMessage(`调用输出${AIResponse}`);
-
-  //   editBuilder.insert(
-  //     linePosition + 1,
-  //     `Current line content: ${lineContent}\n`
-  //   );
-  console.log("调用输出");
+  const newPosition = editor.position.with(editor.position.line + 1, 0);
+  editor.editor.edit((editBuilder) => {
+    editBuilder.insert(newPosition, AIResponse + "\n");
+  });
 }
 
 // This method is called when your extension is activated
@@ -42,11 +41,15 @@ export function activate(context: vscode.ExtensionContext) {
   let disposable = vscode.commands.registerCommand(
     "zen.getCurrentLineContent",
     () => {
+      const editor = getEditor();
       // Get the active editor
-      const lineContent = getTextEditorCurrentLine();
-      if (!["	"].includes(lineContent) && lineContent.length > 0) {
-        const AIResponse = askAI(lineContent);
-        outputCode(AIResponse);
+      if (
+        editor &&
+        !["	"].includes(editor?.lineContent) &&
+        editor?.lineContent.length > 0
+      ) {
+        const AIResponse = askAI(editor?.lineContent);
+        outputCode(editor, AIResponse);
       }
     }
   );
