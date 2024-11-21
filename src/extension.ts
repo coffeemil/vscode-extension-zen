@@ -38,7 +38,7 @@ async function askAI(question: string): Promise<string> {
       },
       {
         role: "user",
-        content: "No special characters"
+        content: "No special characters , no ```javascript and ```"
       },
       {
         role: "user",
