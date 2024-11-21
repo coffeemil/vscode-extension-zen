@@ -78,7 +78,7 @@ async function askAI(question: string): Promise<string> {
 function outputCode(editor: Editor, AIResponse: string) {
   const newPosition = editor.position.with(editor.position.line + 1, 0);
   editor.editor.edit((editBuilder) => {
-    editBuilder.insert(newPosition, AIResponse + "\n");
+    editBuilder.insert(newPosition, "\n" + AIResponse + "\n");
   });
 }
 
