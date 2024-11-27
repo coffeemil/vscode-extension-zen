@@ -39,7 +39,6 @@ export async function request(question: string): Promise<string> {
       Authorization: "Bearer " + api_key
     }
   });
-  console.log(res);
   
   if (!res.ok) {
     throw new Error("Net Error");
