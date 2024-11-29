@@ -16,8 +16,14 @@
   "contributes": {
     "commands": [
       {
-        "command": "zen.getCurrentLineContent",
-        "title": "Get Current Line Content"
+        "command": "zen.generateByLine1",
+        "title": "generateByLine \n 根据单行注释AI编码",
+        "category": "zen"
+      },
+      {
+        "command": "zen.translatePage",
+        "title": "translatePage \n 翻译整页",
+        "category": "zen"
       }
     ]
   },

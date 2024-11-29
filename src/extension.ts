@@ -30,9 +30,10 @@ function outputCode(editor: Editor, AIResponse: string) {
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
+// 单行注释AI自动编码
 export function activate(context: vscode.ExtensionContext) {
-  let disposable = vscode.commands.registerCommand(
-    "zen.getCurrentLineContent",
+  const generateByLine = vscode.commands.registerCommand(
+    "zen.generateByLine",
     async () => {
       const editor = getEditor();
       // Get the active editor
@@ -48,9 +49,17 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
-  context.subscriptions.push(disposable);
+  // 整页文件翻译
+  const translatePage = vscode.commands.registerCommand(
+    "zen.translatePage",
+    async () => {
+      console.log("translatePage");
+    }
+  );
+
+  context.subscriptions.push(generateByLine);
+  context.subscriptions.push(translatePage);
 }
 
 // This method is called when your extension is deactivated
 export function deactivate() {}
-
