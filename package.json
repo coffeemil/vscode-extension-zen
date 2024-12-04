@@ -16,7 +16,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "zen.generateByLine1",
+        "command": "zen.generateByLine",
         "title": "generateByLine \n 根据单行注释AI编码",
         "category": "zen"
       },

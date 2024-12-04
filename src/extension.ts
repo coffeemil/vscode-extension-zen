@@ -20,14 +20,6 @@ function getEditor(): Editor | null {
   }
 }
 
-// output AI Code
-function outputCode(editor: Editor, AIResponse: string) {
-  const newPosition = editor.position.with(editor.position.line + 1, 0);
-  editor.editor.edit((editBuilder) => {
-    editBuilder.insert(newPosition, "\n" + AIResponse + "\n");
-  });
-}
-
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 // 单行注释AI自动编码
@@ -43,8 +35,14 @@ export function activate(context: vscode.ExtensionContext) {
         editor?.lineContent.length > 0
       ) {
         const AI = require("./AI/index");
-        const AIResponse = await AI.request(editor?.lineContent);
-        outputCode(editor, AIResponse);
+        const AIResponse = await AI.requestAutoMaticCodeWriting(
+          editor?.lineContent
+        );
+        // output AI Code
+        const newPosition = editor.position.with(editor.position.line + 1, 0);
+        editor.editor.edit((editBuilder) => {
+          editBuilder.insert(newPosition, "\n" + AIResponse + "\n");
+        });
       }
     }
   );
@@ -53,12 +51,21 @@ export function activate(context: vscode.ExtensionContext) {
   const translatePage = vscode.commands.registerCommand(
     "zen.translatePage",
     async () => {
-      console.log("translatePage");
+      const editor = getEditor();
+      const document = editor?.editor.document;
+      if (document) {
+        const AI = require("./AI/index");
+        const AIResponse = await AI.requestTranslateIntoCN(document.getText());
+        // 替换
+        editor.editor.edit((editBuilder) => {
+          editBuilder.replace(
+            new vscode.Range(0, 0, editor.editor.document.lineCount, 0),
+            AIResponse
+          );
+        });
+      }
     }
   );
-
-  context.subscriptions.push(generateByLine);
-  context.subscriptions.push(translatePage);
 }
 
 // This method is called when your extension is deactivated
