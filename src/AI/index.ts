@@ -63,14 +63,18 @@ export async function requestTranslateIntoCN(
           "You are a Chinese translation machine,but the user's original input must remain the same translation is based on the original input translation."
       },
       {
-        role: "system",
+        role: "user",
         content:
           "Translate in each unit of action.adding the result to the each line."
       },
       {
-        role: "system",
+        role: "user",
         content:
           "The original input Chinese do not need to be translated."
+      },
+      {
+        role: "user",
+        content: "No special characters , no ```javascript and ```"
       },
       {
         role: "user",
